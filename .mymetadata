@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="yitoawl"
+  id="myeclipse.1318917649953"
+  context-root="/yitoawl"
+  j2ee-spec="5.0"
+  archive="yitoawl.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

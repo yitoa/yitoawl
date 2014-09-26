@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" useStatementNamespaces="true"
+		statementCachingEnabled="true" classInfoCacheEnabled="true" />
+	<sqlMap resource="com/yitoa/wl/dao/sqlmap/ip.xml" />
+	<sqlMap resource="com/yitoa/wl/dao/sqlmap/phone.xml" />
+	<sqlMap resource="com/yitoa/wl/dao/sqlmap/user.xml" />
+</sqlMapConfig>
+

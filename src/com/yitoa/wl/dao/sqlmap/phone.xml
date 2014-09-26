@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="phone">
+	<typeAlias alias="phone"
+		type="com.yitoa.wl.domian.IP" />
+	<select id="queryWIp" resultClass="phone"  parameterClass="java.lang.String">
+	     <![CDATA[select wip,dk from phone where mac =#mac#]]>
+	</select>
+	
+	<!-- 根据mac地址修改数据库里面的ip -->
+	<update id="updIp"  parameterClass="phone">
+	     <![CDATA[update phone set wip=#wip#,dk=#dk# where mac =#mac#]]>
+	</update>
+	
+	<insert id="add" parameterClass="phone">
+	     <![CDATA[ insert  into phone (mac,wip,dk) values (#mac#,#wip#,#dk#)]]>
+	     <selectKey resultClass="java.lang.Integer" keyProperty="id">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+	</insert>
+	
+	<select id="queryCount" resultClass="java.lang.Integer"  parameterClass="java.lang.String">
+	     <![CDATA[select count(1) from phone where mac =#mac#]]>
+	</select>
+</sqlMap>  

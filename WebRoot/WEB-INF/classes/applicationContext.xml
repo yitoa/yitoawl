@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd" >
+
+   <!-- 通过Spring创建数据绑定的类-->   
+    <bean id="aegisBean" class="org.apache.cxf.aegis.databinding.AegisDatabinding" /> 
+    <bean id="jaxWsServiceFactoryBean" class="org.apache.cxf.jaxws.support.JaxWsServiceFactoryBean" scope="prototype">
+   			<property name="wrapped" value="true" />
+   			<property name="dataBinding" ref="aegisBean" />
+   	</bean>
+   	<bean id="yitoaWlWebService" class="com.yitoa.wl.YitoaWlWebServiceImpl">
+	</bean>
+	
+	<bean id="yitoaUserWebService" class="com.yitoa.wl.YitoaUserWebServiceImpl">
+	</bean>
+	<jaxws:endpoint id="reservationService" implementor="#yitoaWlWebService" address="/reservationService">
+	  <jaxws:serviceFactory>
+			<ref bean="jaxWsServiceFactoryBean" />
+	  </jaxws:serviceFactory>
+	</jaxws:endpoint>
+	
+	<jaxws:endpoint id="userService" implementor="#yitoaUserWebService" address="/userService">
+	  <jaxws:serviceFactory>
+			<ref bean="jaxWsServiceFactoryBean" />
+	  </jaxws:serviceFactory>
+	</jaxws:endpoint>
+	
+	
+	
+	<!-- 开发环境用的ds-->
+	<bean id="envPropertyLocator"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="fileEncoding" value="UTF-8"></property>
+		<property name="locations">
+			<list>
+				<value>classpath:jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+	 
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="maxIdle" value="${jdbc.maxIdle}" />
+		<property name="minIdle" value="${jdbc.minIdle}" />
+		<property name="validationQuery" value="${jdbc.validationQuery}"/>
+		<property name="testWhileIdle" value="${jdbc.testWhileIdle}"/>
+		<property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}"/>
+		<property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}"/>
+		<property name="testOnBorrow" value="${jdbc.testOnBorrow}"></property>
+	</bean>
+	
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:ibatis-default.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="sqlClient" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<property name="sqlMapClient">
+			<ref local="sqlMapClient" />
+		</property>
+	</bean>
+</beans>

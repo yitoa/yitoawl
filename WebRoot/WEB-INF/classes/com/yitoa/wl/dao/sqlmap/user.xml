@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="user">
+	<typeAlias alias="user"
+		type="com.yitoa.wl.domian.User" />
+	<select id="queryUser" resultClass="user"  parameterClass="user">
+	     <![CDATA[select id,username,password,phonenumber,email from user where username=#username# and password=#password#]]>
+	</select>
+
+	<insert id="addUser" parameterClass="user">
+	     <![CDATA[ insert  into user (username,password,phonenumber,email) values (#username#,#password#,#phonenumber#,#email#)]]>
+	     <selectKey resultClass="java.lang.Integer" keyProperty="id">
+            SELECT @@IDENTITY AS id
+        </selectKey>
+	</insert>
+	
+	<select id="queryCount" resultClass="java.lang.Integer"  parameterClass="java.lang.String">
+	     <![CDATA[select count(1) from user where username =#username#]]>
+	</select>
+	
+</sqlMap>

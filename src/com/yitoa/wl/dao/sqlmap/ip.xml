@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ip">
+	<typeAlias alias="ip" type="com.yitoa.wl.domian.IP" />
+	<select id="queryWIp" resultClass="ip" parameterClass="ip">
+		<![CDATA[select wip,nip,dk from ip where mac =#mac# and userid=#userid#]]>
+	</select>
+
+	<!-- 根据mac地址修改数据库里面的ip -->
+	<update id="updIp" parameterClass="ip">
+		<![CDATA[update ip set wip=#wip#,dk=#dk#,nip=#nip#,poweron=#poweron#,air=#air# where mac =#mac#]]>
+	</update>
+
+	<insert id="add" parameterClass="ip">
+		<![CDATA[ insert  into ip (mac,nip,wip,dk,poweron,air) values (#mac#,#nip#,#wip#,#dk#,#poweron#,#air#)]]>
+		<selectKey resultClass="java.lang.Integer" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+
+	<update id="updBm" parameterClass="ip">
+		update ip set bm=#bm# where mac=#mac# and userid=#userid#
+	</update>
+
+	<select id="queryCount" resultClass="java.lang.Integer"
+		parameterClass="java.lang.String">
+		<![CDATA[select count(1) from ip where mac =#mac#]]>
+	</select>
+
+	<select id="queryByUserIdWlsn" resultClass="java.lang.Integer"
+		parameterClass="ip">
+		<![CDATA[select count(1) from ip where mac =#mac# and userid=#userid#]]>
+	</select>
+
+	<insert id="addUserIdWlsn" parameterClass="ip">
+		<![CDATA[ insert  into ip (mac,userid) values (#mac#,#userid#)]]>
+		<selectKey resultClass="java.lang.Integer" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+
+	<select id="querySbByUserId" resultClass="ip"
+		parameterClass="java.lang.Integer">
+		<![CDATA[select mac,poweron,air,bm from ip where userid=#userid#]]>
+	</select>
+
+	<update id="updUserId" parameterClass="ip">
+		<![CDATA[update ip set userid=#userid# where mac=#mac# and userid=#userid#]]>
+	</update>
+
+	<select id="queryIsNet" resultClass="java.lang.String" parameterClass="ip">
+		<![CDATA[select ip.`nip` from  ip where ip.`mac`=#mac#  and `ip`.`userid`=#userid# and ip.`wip`=(select wip from phone where mac =#phoneMac#);]]>
+	</select>
+</sqlMap>
